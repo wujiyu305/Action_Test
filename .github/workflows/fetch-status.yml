@@ -1,0 +1,33 @@
+name: Fetch System Status
+
+# 手动触发工作流
+on:
+  workflow_dispatch:
+
+jobs:
+  fetch-and-save:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v3
+
+    - name: Fetch System Status data
+      run: |
+        # 创建 data 目录（如果不存在）
+        mkdir -p data
+        
+        # 使用 curl 抓取数据
+        curl -o "records/system_status_$(date +'%Y%m%d_%H%M%S').json" https://www.apple.com/support/systemstatus/data/system_status_zh_CN.js
+
+    - name: Commit and push changes
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        
+        # 添加新文件并提交
+        git add records/
+        git commit -m "Fetch system status at $(date +'%Y-%m-%d %H:%M:%S')"
+        
+        # 推送到远程仓库
+        git push
