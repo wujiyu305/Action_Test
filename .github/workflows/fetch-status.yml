@@ -26,8 +26,8 @@ jobs:
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         
         # 添加新文件并提交
-        git add records/
-        git commit -m "Fetch system status at $(date +'%Y-%m-%d %H:%M:%S')"
+        git add data/
+        git commit -m "Fetch Google system status at $(date +'%Y-%m-%d %H:%M:%S')"
         
-        # 推送到远程仓库
-        git push
+        # 推送到远程仓库，使用 GITHUB_TOKEN
+        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref }}
